@@ -12,6 +12,7 @@ fi
 sudo apt-get update -q -y
 sudo apt-get upgrade -q -y
 sudo apt-get install openssh-server vim -q -y
+sudo addgroup --system nsm
 
 # Bro Setup
 echo -n "Enter your monitoring interface and press [ENTER]: "
@@ -25,8 +26,8 @@ gzip -d GeoLiteCityv6.dat.gz
 mv GeoLiteCity.dat /usr/share/GeoIP/GeoIPCity.dat
 mv GeoLiteCityv6.dat /usr/share/GeoIP/GeoIPCityv6.dat
 sed -i -e "s/eth0/${intMON}/" /etc/bro/node.cfg
-broctl install
-broctl start
+sudo broctl install
+sudo broctl start
 
 # ELK setup
 wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add - 
@@ -36,7 +37,6 @@ sudo apt-get update -y
 sudo apt-get install oracle-java8-installer -q -y
 
 # Elasticsearch
-sudo apt-get update
 sudo apt-get install elasticsearch -q -y
 sudo systemctl enable elasticsearch
 sudo systemctl start elasticsearch
@@ -50,4 +50,3 @@ sudo systemctl start logstash.service
 sudo apt-get install kibana -q -y
 sudo systemctl enable kibana
 sudo systemctl start kibana
-
